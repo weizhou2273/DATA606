@@ -1,0 +1,82 @@
+---
+title: "606 hw1 weizhou"
+author: "Wei Zhou"
+date: "1/27/2019"
+output: html_document
+---
+
+####1.8 Smoking habits of UK residents.    
+a. Each row represent the a participant's demographics, econstatus and smoking habits.   
+b. 1691 participants   
+c. 
+```{r}
+col_name <- c('sex','age','marital','grossincome','smoke','amt weekends','amt weekdays')
+col_type <- c('categorical','numerical','categorical','categorical','categorical','numerical','numerical')
+col_subtype <- c('not ordinal','continuous','not ordinal','ordinal','not ordinal','continous','contiuous')
+
+answer1_8_c <- data.frame(col_name = c(col_name),col_type = c(col_type),col_subtype = c(col_subtype))
+answer1_8_c
+```
+####1.10 Cheaters, scope of inference.    
+a.The population of interest : 5- 15 yr old children. The sample is 160 children between 5- 15 yrs old   
+b.The results cannot be generalized to the population as for the following reasons:    
+1. The experiment is designed to explore the casual relationship between honesty and instrution rather than the age.    
+2. Different characteristic will interfere the casual relationship      
+3. The sample size is too small     
+
+
+####1.28 Reading the paper.  
+a. We cannot conclude that smoking causes dementia later in life, since this is not a randomized controlled experiment. We can only say that there is a correlation between smoking an dementia. 
+
+
+b. It is not justified to say 'The study shows that sleep disorders lead to bullying in school children.' This is because this survey is not a randomized controlled experiment. We can conclud that there is a correlation between sleep disorder and bullying in school children.
+
+####1.36 Exercise and mental health.   
+(a).  Randomized controlled study    
+(b).  Treatment group: Those instructed to exercise twice a week   
+      Controlled group: Those instructed not to exercise.    
+(c).  This study use blocking based on age groups.   
+(d).  No. Blinding is not used in this study. Participants know which group they are in by given or not any instructions on excercise.    
+(e).  Yes, we can draw a conclusion that there is a causal relationship between exercise and mental health because this is a randomized controlled study.
+
+####1.48 Stats scores.  
+```{r}
+ score<- c(57, 66, 69, 71, 72, 73, 74, 77, 78, 78, 79, 79, 81, 81, 82, 83, 83, 88, 89, 94)
+boxplot(score)
+```
+
+####1.50 Mix-and-match. 
+(a) --> (2): Distribution (a) is a normal distribution 
+(b) --> (3): Distribution (b) is uniform distributed thus the bloxplot is expected to have a wider 25% - 75% range.    
+(c) --> (1): Distribution (c) is right skewed distribution with long tail. 
+
+####1.56 Distributions and appropriate statistics, Part II .  
+(a) This is a right skewed distribution as the median price is only 0.075 of the range. The median would best represent a typical observation as there are a meaningful number of houses costing more than $6M.The variability would be best represented using the IQR because SD is based on the mean.   
+(b) This is a uniform distribution as the number of house falls in each price quartile are the same. Mean and Median could both represent a typical observation in the data. Both IQR adn SD would best represent  the variability of observations.    
+
+(c) This is a slightly right skewed distribution given that most college student almost don't drink, the right tail shows a few students drink excessively. Median would best describe observation and IQR would best describe variability since they are not affected as much by outliers. 
+
+(d) This is a right skew distribution given the assumption that the number of higher level position is less the lower position and the salary level is positively correlated with the position level. Median would best describe observation and IQR would best describe variability since they are not affected as much by outliers. 
+
+####1.70 Heart transplants. 
+(a) Base on the mosaic plot, Survival independent is not independent from patient got a transplant. We can see there is a strong correlation between survival rate/time and transplant. 
+
+(b) The heart transplant can prolong patient's survival time.
+
+(c) 
+```{r}
+# install.packages("openintro")
+library(openintro)
+treatment <- subset(heartTr, transplant == 'treatment')
+control <- subset(heartTr, transplant == 'control')
+prop.table(table(treatment$survived))
+```
+```{r}
+prop.table(table(control$survived))
+```
+65% of patients in the treatment group died.
+88% of patients in the control group died.
+
+(d)
+
+
