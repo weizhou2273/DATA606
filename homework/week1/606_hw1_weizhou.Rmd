@@ -16,7 +16,7 @@ col_subtype <- c('not ordinal','continuous','not ordinal','ordinal','not ordinal
 
 answer1_8_c <- data.frame(col_name = c(col_name),col_type = c(col_type),col_subtype = c(col_subtype))
 answer1_8_c
-```
+``` 
 ####1.10 Cheaters, scope of inference.    
 a.The population of interest : 5- 15 yr old children. The sample is 160 children between 5- 15 yrs old   
 b.The results cannot be generalized to the population as for the following reasons:    
@@ -77,6 +77,9 @@ prop.table(table(control$survived))
 65% of patients in the treatment group died.
 88% of patients in the control group died.
 
-(d)
+(d-i) Heart transplants can increase lifespan for gravely ill patient with heart problem.    
 
+(d-ii) 28, 75, 69, 34, 0, independent
 
+(d-iii) 
+The transplant treatment is effective in increasing survival rate of patients, since the simulated difference is pretty low.
