@@ -1,0 +1,248 @@
+---
+title: "Data606_hw2_weizhou"
+author: "Wei Zhou"
+date: "2/17/2019"
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 2.6 Dice Rolls
+#### a.Getting a sum of 1
+<span style="color:blue">
+The minimum number of each dice is one, thus it is impossible to get a sum of 1 with two dices. 
+</span>
+
+#### b. getting a sum of 5?
+<span style="color:blue">
+This sum can be obtained by 4 different situation: 1+4, 4+1, 2+3， 3+2
+Thus the possibility is 4/36
+</span>
+```{r}
+4/36
+```
+
+
+#### c. getting a sum of 12?
+<span style="color:blue">
+This sum can only be obtained by 6+6. The possibility is 1/36
+</span>
+```{r}
+1/36
+```
+
+# 2.8 Poverty and language.
+####(a) Are living below the poverty line and speaking a foreign language at home disjoint?
+<span style="color:blue">
+No, there are 4.2% of Americans both live below the poverty line and speak a language other than English.
+</span>
+
+####(b) Draw a Venn diagram summarizing the variables and their associated probabilities.
+```{r}
+library(venneuler)
+american= 2373 
+poverty = 0.146
+language = 0.207
+both = 0.042
+MyVenn <- venneuler(c(Poverty=poverty, Language=language,'Poverty&Language'=both))
+                    
+MyVenn$labels <- c("Poverty \n 14.6%","Foreign language\n 20.7%")
+plot(MyVenn)
+```
+
+
+####(c) What percent of Americans live below the poverty line and only speak English at home?
+
+```{r}
+P_english_poverty=poverty - both
+P_english_poverty
+```
+<span style="color:blue">
+The percent of Americans live below the poverty line and only speak English at home is 10.4%
+</span>
+
+####(d) What percent of Americans live below the poverty line or speak a foreign language at home?
+```{r}
+P_foreign_poverty = poverty + language - both
+P_foreign_poverty
+```
+
+####(e) What percent of Americans live above the poverty line and only speak English at home?
+```{r}
+P_above_proverty_english = 1-P_foreign_poverty
+P_above_proverty_english
+```
+
+####(f) Is the event that someone lives below the poverty line independent of the event that the person speaks a foreign language at home?
+```{r}
+###Possibility of foreign language given that under the poverty line
+P_foreign_language_given_poverty = 0.042 / 0.146
+P_foreign_language_given_poverty
+```
+<span style="color:blue">
+Since the possibility of speaking foreign language at home given that under the poverty line is 0.2876, which is much higher than possibility of speaking foreign language alone (0.207). Thus, the event that someone lives below the poverty line is not independent of the event that the persons speaks a foreign language at home. 
+</span>
+
+#2.20 Assortative mating 
+####(a) What is the probability that a randomly chosen male respondent or his partner has blue eyes?
+```{r}
+P_1 = (78+19+11+23+13)/204
+P_1
+```
+<span style="color:blue">
+The probability that a randomly chosen male respondent or his partner has blue eyes is 70.59%
+</span>
+
+####(b) What is the probability that a randomly chosen male respondent with blue eyes has a partner with blue eyes?
+```{r}
+P_2 = (78) / (114)
+P_2
+```
+<span style="color:blue">
+The probability that a randomly chosen male respondent or his partner has blue eyes is 68.42%
+</span>
+
+
+####(c) What is the probability that a randomly chosen male respondent with brown eyes has a partner with blue eyes? What about the probability of a randomly chosen male respondent with green eyes having a partner with blue eyes?
+```{r}
+P_3 = 19 / 54 
+P_3
+
+P_4 = 11/ 36 
+P_4
+```
+<span style="color:blue">
+The probability that a randomly chosen male respondent with brown eyes has a partner with blue eyes is 35.18%
+The probability of a randomly chosen male respondent with green eyes having a partner with blue eyes is 30.56%
+</span>
+
+####(d) Does it appear that the eye colors of male respondents and their partners are independent? Explain your reasoning.
+```{r}
+## The possibility of blue eye male has a blue eye partner
+P_5 = 78 / 114 
+P_5
+## The possibility of blue eye partner
+P_6 = 108 / 204
+P_6
+
+P_5-P_6
+```
+<span style="color:blue">
+If the eye colors of male respondents and their partners are indepent, we should expect to see that the possibility of blue eye male has a blue eye partner should equals to the possibility of blue eye partner. 
+Howerver possibility of blue eye male has a blue eye partneris 15.5% greater than the possibility of blye eye partner.   
+Thus these two events are not independent. 
+</span>
+
+
+#2.30 Books on a bookshelf
+
+####(a) Find the probability of drawing a hardcover book first then a paperback fiction book second when drawing without replacement.
+```{r}
+P_1 = 28/95 * 59/94
+P_1
+```
+<span style="color:blue">
+The probability of drawing a hardcover book first then a paperback fiction book second when drawing without replacement is 18.50%
+</span>
+
+####(b) Determine the probability of drawing a fiction book first and then a hardcover book second, when drawing without replacement.
+```{r}
+## When the first draw is hardcover fiction
+P_2_1 = 13/95 * 27/94
+## When the first draw is paperback fiction
+P_2_2 = 59/95 * 28/94
+P_2 = P_2_1 + P_2_2
+P_2
+```
+<span style="color:blue">
+The probability of drawing a fiction book first and then a hardcover book second, when drawing without replacement is 22.43%
+</span>
+
+####(c) Calculate the probability of the scenario in part (b), except this time complete the calculations under the scenario where the first book is placed back on the bookcase before randomly drawing the second book.
+```{r}
+### since the first drawed book is placed back , the second draw is not affected by the first draw. 
+P_3 = 72/96 * 28/95
+P_3
+```
+<span style="color:blue">
+The probability of drawing a fiction book first and then a hardcover book second, when drawing with replacement is 22.11%
+</span>
+
+####(d) The final answers to parts (b) and (c) are very similar. Explain why this is the case.
+<span style="color:blue">
+The small difference is caused by the replacement which changed
+</span>
+
+
+#2.38 Baggage fees
+
+####(a) Build a probability model, compute the average revenue per passenger, and compute the corresponding standard deviation.
+```{r}
+bag_num = c(0,1,2)
+fee = c(0,25,60)
+prob = c(0.54,0.34,0.12)
+avg_rev = sum(fee*prob)
+avg_rev
+
+sd=sqrt((sum(fee^2 * prob) - avg_rev^2))
+sd
+
+
+
+```
+The average revenue is $15.7.
+The sd of this probability distribution is 19.95019
+
+
+####(b) About how much revenue should the airline expect for a flight of 120 passengers? With what standard deviation? Note any assumptions you make and if you think they are justified.
+
+ 
+```{r}
+total_rev  = 120 * avg_rev
+total_rev
+```
+The total revenue is $1884 with sd of 19.95019
+
+
+#2.44 Income and gender
+
+####(a) Describe the distribution of total personal income.
+
+```{r}
+income <- c("1 to 9,999","10,000 to 14,999","15,000 to 24,999","25,000 to 34,999","35,000 to 49,999","50,000 to 64,999","65,000 to 74,999","75,000 to 99,999","100,000 or more")
+
+total <- c(2.2,4.7,15.8,18.3,21.2,13.9,5.8,8.4,9.7)
+
+df = data.frame(income, total)
+
+
+barplot(df$total,names.arg=income)
+```
+
+This distribution has two local peaks in '35000 to 49999' and '100000 and more' while the universal peak is '35000 to 49999'
+
+####(b) What is the probability that a randomly chosen US resident makes less than $50,000 per year?
+```{r}
+P_2 = (21.2+18.3+15.8+4.7+2.2)/100
+P_2
+```
+The probability that a randomly chosen US resident makes less than $50,000 per year is 62.2%
+
+####(c) What is the probability that a randomly chosen US resident makes less than $50,000 per year and is female? Note any assumptions you make.
+```{r}
+P_2 * 0.41 
+```
+Assuming:   
+1. this sample can represent the overall US resident
+2. The income is indenpendent from gender
+The probability that a randomly chosen US resident makes less than $50,000 per year and is female is 25.50%
+
+
+####(d) The same data source indicates that 71.8% of females make less than $50,000 per year. Use this value to determine whether or not the assumption you made in part (c) is valid.
+The second assumption is not valid since the percentage of female making less than $50000 per year is much higher than the proportion of female in the sample. 
+
