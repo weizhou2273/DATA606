@@ -1,0 +1,187 @@
+---
+title: "data606_hw3_weizhou"
+author: "Wei Zhou"
+date: "3/3/2019"
+output:
+    html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ./lab.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(DATA606)
+```
+
+### 3.2 Area under the curve, Part II. 
+##### Z>-1.13: 87.1% 
+```{r}
+## P(Z>-1.13) = 1−P(Z<−1.13)
+Z = -1.13
+normalPlot(bounds=c(Z,Inf))
+```
+
+##### Z< 1.8 : 57.1% 
+```{r}
+Z = 0.18
+normalPlot(bounds=c(-Inf,Z))
+```
+
+##### Z> 8 : 6.66*e^-16
+```{r}
+Z = 8
+normalPlot(bounds=c(Z,Inf))
+```
+
+##### abs(Z)<0.5 : 38.3%
+```{r}
+Z = 0.5
+normalPlot(bounds=c(-Z,Z))
+```
+
+###3.4 Triathlon times, Part I. 
+#### (a) Write down the short-hand for these two normal distributions.
+Men (Age:30-34): N(μ=4313,σ=583)    
+Women (Age:25-29): N(μ=5261,σ=807)
+
+#### (b) What are the Z-scores for Leo’s and Mary’s finishing times? What do these Z-scores tell you?
+Leo: 
+```{r}
+Z_leo =(4948-4313) / 583 
+Z_mary =(5513-5261) / 807
+
+Z_leo
+Z_mary
+```
+The Z-score transforms individual's performance into standard normal distribution and allow us to compare them on a sam scale. According to the Z-score, Leo has worse performance than Mary. 
+
+
+####(c) Did Leo or Mary rank better in their respective groups? Explain your reasoning.
+In this case, we are comparing the finishing time of competitors. Thus, the more left the performance positioning in the normal distribution, the better the performance. Mary's Z-score is 0.31 which is to the left of Leo's Z-score. Thus Mary's performance is better than Leo's performance. 
+
+####(d) What percent of the triathletes did Leo finish faster than in his group?
+
+About 13.8% pf triathletes did Leo finish faster than in his group. 
+```{r}
+normalPlot(bounds=c(Z_leo,Inf))
+```
+
+#####(e) What percent of the triathletes did Mary finish faster than in her group?
+
+About 37.7% pf triathletes did Leo finish faster than in his group. 
+```{r}
+normalPlot(bounds=c(Z_mary,Inf))
+```
+
+
+####If the distributions of finishing times are not nearly normal, would your answers to parts (b) - (e) change? Explain your reasoning.
+If the distribution of finishing time are not nearly normal, we cannot use standardization to find Z-Score for each finisher. 
+
+
+
+###3.18 Heights of female college students.
+#### (a) The mean height is 61.52 inches with a standard deviation of 4.58 inches.Use this information to determine if the heights approximately follow the 68-95-99.7% Rule.
+```{r}
+hgt = c(54, 55, 56, 56, 57, 58, 58, 59, 60, 60, 60, 61, 61, 62, 62, 63, 63, 63, 64, 65, 65, 67, 67, 69, 73)
+mean = mean(hgt)
+sd = sd(hgt)
+
+for (n in c(1,2,3)){
+sd_n= hgt[hgt>mean-sd*n & hgt<mean+sd*n]
+perc=length(sd_n) / length(hgt)
+print(perc)
+}
+```
+Given the proportion of 68%, 96%, 100% for respectively 1,2,3* standard deviations, the distribution of heights does approximately follow the rule.
+
+####(b) Do these data appear to follow a normal distribution? Explain your reasoning using the graphs provided below.
+
+Most part of the data dp appear to follow a normal distribution. 
+```{r}
+qqnormsim(hgt)
+```
+
+
+
+###3.22 Defective rate. 
+####(a) What is the probability that the 10th transistor produced is the first with a defect?
+This case fits a geomtric distribution. 
+```{r}
+df_rate = 0.02
+n = 9
+dgeom(n, df_rate)
+```
+
+####(b) What is the probability that the machine produces no defective transistors in a batch of 100?
+The probability is 13.26%
+```{r}
+(1-0.02)^100
+```
+
+####(c) On average, how many transistors would you expect to be produced before the first with a defect? What is the standard deviation?
+On average you should expect 50 transistors to be produced before the first with a defect. The standad deviation is 0.1443.
+```{r}
+mean =1/df_rate
+sd = sqrt((df_rate)/(1-df_rate)^2)
+mean 
+sd
+```
+
+####(d) Another machine that also produces transistors has a 5% defective rate where each transistor is produced independent of the others. On average how many transistors would you expect to be produced with this machine before the first with a defect? What is the standard deviation?
+On average you should expect 20 transistors to be produced before the first with a defect. The standad deviation is 0.2354.
+```{r}
+df_rate = 0.05
+mean =1/df_rate
+sd = sqrt((df_rate)/(1-df_rate)^2)
+mean 
+sd
+```
+
+####(e) Based on your answers to parts (c) and (d), how does increasing the probability of an event affect the mean and standard deviation of the wait time until success? 
+The increase of probability of an even will make waite time untill success shorter. Will make the sd greater. 
+
+### 3.38 Male children.
+####(a) Use the binomial model to calculate the probability that two of them will be boys.
+The probability that two of them will be boys is 38.23%
+```{r}
+p_boy = 0.51
+dbinom(2, 3,p_boy)
+```
+
+####Write out all possible orderings of 3 children, 2 of whom are boys. Use these scenarios to calculate the same probability from part (a) but using the addition rule for disjoint outcomes. Confirm that your answers from parts (a) and (b) match. 
+The possible sequences are :
+bbg, bgb, gbb
+```{r}
+p_boy^2 * (1-p_boy)*3
+```
+The answers match.
+
+
+####(c) If we wanted to calculate the probability that a couple who plans to have 8 kids will have 3 boys, briefly describe why the approach from part (b) would be more tedious than the approach from part (a).
+Using part b, you will have to list out all possible sequence, which is very tedious. 
+The probability is 20.98%
+```{r}
+dbinom(3, 8,p_boy)
+```
+
+
+
+###3.42 Serving in volleyball.
+####(a) What is the probability that on the 10th try she will make her 3rd successful serve?
+Given the 3rd success serve has to be the 10th trail, it could be interprete as the first 9 trial has 2 success server and the 10th trial is success. 
+```{r}
+p_serve = 0.15
+dbinom(2,9,p_serve)*p_serve
+```
+The probability is 3.9%.
+
+####(b) Suppose she has made two successful serves in nine attempts. What is the probability that her 10th serve will be successful?
+Given the assumption that her serves are independent of each other, the 10th serve being successful is still 15%. 
+
+####Even though parts (a) and (b) discuss the same scenario, the probabilities you calculated should be different. Can you explain the reason for this discrepancy?
+Part a and part b calculates different events' probability. Part A sees the 10 events as a whole while part b only see the 10th events. Thus the calculation should be different. 
+
+
