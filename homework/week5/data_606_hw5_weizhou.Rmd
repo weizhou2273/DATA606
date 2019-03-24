@@ -1,0 +1,184 @@
+---
+title: "Data606_hw5_weizhou"
+author: "Wei Zhou"
+date: "3/23/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library('DATA606')
+library('knitr')
+```
+
+
+
+## Exercise 5.6 Working backwards
+
+#### Part II. A 90% confidence interval for a population mean is (65, 77). The population distribution is approximately normal and the population standard deviation is unknown. This confidence interval is based on a simple random sample of 25 observations. Calculate the sample mean, the margin of error, and the sample standard deviation.
+
+```{r}
+lower = 65
+upper = 77 
+n = 25 
+mean = (lower+upper) / 2 
+margin_error = (upper - lower) / 2 
+t = qt(0.95,25-1) 
+sd = (margin_error / t) * 5
+mean
+margin_error
+sd
+```
+mean = 71   
+margin_error = 6    
+sd = 17.53481 
+
+
+## Exercise 5.14 SAT scores. 
+
+#### (a) Raina wants to use a 90% confidence interval. How large a sample should she collect?
+```{r}
+ME = 25
+SD = 250
+z = qnorm(0.95)
+n = ((SD*z)/ME)^2
+n
+```
+The sample size should at least have 271 students. 
+
+
+#### (b) Luke wants to use a 99% confidence interval. Without calculating the actual sample size, determine whether his sample should be larger or smaller than Raina’s, and explain your reasoning.
+
+Luke's sample size should be larger than Raina's sample size. Z(ci=0.95) < Z(ci=0.99). The sample size is positively affected by the Z score. Thus Luke's sample size should be larger. 
+
+#### (c) Calculate the minimum required sample size for Luke.
+
+```{r}
+ME = 25
+SD = 250
+z = 2.58
+n = ((SD*z)/ME)^2
+n
+```
+The minimun requirement sample size for Luke is 666 students. 
+
+##5.20 High School and Beyond, Part I
+
+#### (a) Is there a clear difference in the average reading and writing scores?
+
+It seems no clear difference in the average reading and writing scores. 
+
+
+#### (b) Are the reading and writing scores of each student independent of each other?
+
+Reading and writing scires if each student are not independent. 
+
+#### (c) Create hypotheses appropriate for the following research question: is there an evident difference in the average scores of students in the reading and writing exam?
+
+`H0` There is no evident difference in the average scores of students in the reading and writing exam at the significance level of 0.05
+
+`HA` There is evident difference in the average scores of students in the reading and writing exam at the significance level of 0.05
+
+#### (d) Check the conditions required to complete this test.
+1. Observations is randomly selected from the population. 
+2. Distribution normal and not strongly skewwed   
+3. Sample is large than 30 observations    
+4. Homogeneous, or equal variance exists when the standard deviations of samples are approximately equal. 
+
+#### (e) Observed difference in scores is x¯read−write=-0.545,sd of diff = 8.887. Do these data provide convincing evidence of a difference between the average scores on the two exams?
+
+```{r}
+mean = -0.545 
+sd = 8.887
+n =200 
+se = sd / sqrt(n)
+t = (mean - 0 ) / se 
+p = pt(t,n-1)
+p
+```
+Since the p-value 0.1934 is greater than  0.05 , we fail to reject the null hypothesis there is no evident difference in the aerage scores of students in the reading and writing exam at the significance level of 0.05 
+
+
+#### (f) What type of error might we have made? Explain what the error means in the context of the application.
+We may already made type 2 error and concluded that there is no a difference in the average score of reading and writing by mistake. 
+
+#### (g) Based on the results of this hypothesis test, would you expect a confidence interval for the average difference between the reading and writing scores to include 0? Explain your reasoning.
+Yes, it should include 0. It is because we conclude that there is no difference in the average score of reading and writing.
+
+
+## 5.32 Fuel efficiency of manual and automatic cars, Part I.
+
+##### Each year the US Environmental Protection Agency (EPA) releases fuel economy data on cars manufactured in that year. Below are summary statistics on fuel e“ciency (in miles/gallon) from random samples of cars with manual and automatic transmissions manufactured in 2012. Do these data provide strong evidence of a di???erence between the average fuel e”ciency of cars with manual and automatic transmissions in terms of their average city mileage? Assume that conditions for inference are satisfied. 
+
+`H0` There is no significant difference in average fuel efficiency of cars with manual and automatic transmission in terms of their average city milage.     
+`HA` There is significant difference in average fuel efficiency of cars with manual and automatic transmission in terms of their average city milage. 
+```{r}
+n= 26 
+sd_a = 3.58 
+sd_m = 4.51 
+mean_a = 16.12 
+mean_m = 19.85
+
+se_a = sd_a / sqrt(n)
+se_m = sd_m / sqrt(n)
+
+se = sqrt(se_a^2 + se_m^2)
+t = ((mean_a - mean_m)-0) / se
+p = pt(t,n-1)
+p_2 <- 2*p 
+p_2
+
+```
+The p-value is 0.002884 which is less than 0.05. Therefore I can reject the null hypothesis and conclude that there is significant difference in average fuel efficiency of cars with manual and automatic transmission in terms of their average city milage. 
+
+
+## 5.48 Work hours and education. 
+
+#### (a) Write hypotheses for evaluating whether the average number of hours worked varies across the five groups.
+`H0` The difference of all averages are equal    
+`HA` There is one average that is not equal to the other ones. 
+
+
+#### (b) Check conditions and describe any assumptions you must make to proceed with the test.
+1. Observations are independent within and across groups.   
+2. Distributions of each group are normal and not strongly skewwed.
+3. Homogeneous, or equal variance exists when the standard deviations of samples are approximately equal. 
+4. The sample size is larger than 30. 
+
+#### (c) Below is part of the output associated with this test. Fill in the empty cells.
+
+
+#### (d) 
+```{r}
+n= 1172 
+n_group = 5
+mean_sq_degree = 501.54
+sum_sq_residual = 267382
+
+####df######
+df_degree = n_group-1 
+df_residual = n-n_group
+df_total = n-1
+
+####sq####
+mean_sq_residual = sum_sq_residual / df_residual
+sum_sq_degree = df_degree *mean_sq_degree 
+sum_sq_total = sum_sq_residual + sum_sq_degree
+###f### 
+f = mean_sq_degree / mean_sq_residual
+
+row_name = c('degree','residual','total')
+df =  c(df_degree,df_residual,df_total)
+mean_sq = c(mean_sq_degree,mean_sq_residual,NA)
+sum_sq = c(sum_sq_degree,sum_sq_residual,sum_sq_total)
+f_ls = c(f,NA,NA)
+
+results = data.frame(row_name,df,sum_sq,mean_sq,f_ls)
+results
+```
+
+#### (d) What is the conclusion of the test?
+Since the p-value is 0.0681932, which is larger than 0.05, we failed to reject the null hypothesis that there is no difference among the average of each group. 
+
+
+
