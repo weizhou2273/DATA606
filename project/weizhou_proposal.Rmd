@@ -7,7 +7,12 @@ author: Wei Zhou
 
 ```{r setup, echo=TRUE, results='hide', warning=FALSE, message=FALSE}
 # load data
+library(dplyr)
+library(nycflights13)
+library(ggplot2)
 
+head(flights,10)
+names(flights)
 ```
 
 
@@ -15,49 +20,84 @@ author: Wei Zhou
 
 **You should phrase your research question in a way that matches up with the scope of inference your dataset allows for.**
 
+Is there any relationship between origin airport and and probability of delay? 
 
 
 ### Cases 
 
 **What are the cases, and how many are there?**
 
+```{r}
+nrow(flights)
+summary(flights$year)
+```
 
+Cases are each flights information departure from EWR,JFK,LGA in 2013. 
+
+The are 336776 cases.
 
 ### Data collection 
 
 **Describe the method of data collection.**
 
+Data is clollected by the 'dplyr' library. It contains all airline on-time data for all flights departing NYC in 2013. 
 
 
 ### Type of study 
 
 **What type of study is this (observational/experiment)?**
 
+Observational study
 
 
 ### Data Source 
 
 **If you collected the data, state self-collected. If not, provide a citation/link.**
 
-
+https://github.com/hadley/nycflights13
 
 
 ### Dependent Variable
 
 **What is the response variable? Is it quantitative or qualitative?**
 
+The response variable is airline delay or not
+```{r}
+flights=flights%>%
+  mutate(dep_delay_bool=ifelse(dep_delay>=0,'ontime','delay'))
 
+class(flights$dep_delay_bool)
+```
 
 ### Independent Variable
 
 **You should have two independent variables, one quantitative and one qualitative.**
-
-
+```{r}
+class(flights$origin)
+```
 
 ### Relevant summary statistics 
-
 **Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.**
 
+###### Delay proportion
 ```{r}
+table(flights$dep_delay_bool)
+prop.table(table(flights$dep_delay_bool))
+```
+
+###### number of flights by each departure airport
+```{r}
+table(flights$origin)
+prop.table(table(flights$origin))
 
 ```
+
+###### Contingency table : Airport v.s. Delay
+```{r}
+table(flights$origin, flights$dep_delay_bool)
+prop.table(table(flights$origin, flights$dep_delay_bool),1)
+```
+
+
+
+

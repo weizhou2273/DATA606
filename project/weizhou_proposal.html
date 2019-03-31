@@ -192,39 +192,101 @@ $(document).ready(function () {
 
 <div id="data-preparation" class="section level3">
 <h3>Data Preparation</h3>
-<pre class="r"><code># load data</code></pre>
+<pre class="r"><code># load data
+library(dplyr)
+library(nycflights13)
+library(ggplot2)
+
+head(flights,10)
+names(flights)</code></pre>
 </div>
 <div id="research-question" class="section level3">
 <h3>Research question</h3>
 <p><strong>You should phrase your research question in a way that matches up with the scope of inference your dataset allows for.</strong></p>
+<p>Is there any relationship between origin airport and and probability of delay?</p>
 </div>
 <div id="cases" class="section level3">
 <h3>Cases</h3>
 <p><strong>What are the cases, and how many are there?</strong></p>
+<pre class="r"><code>nrow(flights)</code></pre>
+<pre><code>## [1] 336776</code></pre>
+<pre class="r"><code>summary(flights$year)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    2013    2013    2013    2013    2013    2013</code></pre>
+<p>Cases are each flights information departure from EWR,JFK,LGA in 2013.</p>
+<p>The are 336776 cases.</p>
 </div>
 <div id="data-collection" class="section level3">
 <h3>Data collection</h3>
 <p><strong>Describe the method of data collection.</strong></p>
+<p>Data is clollected by the ‘dplyr’ library. It contains all airline on-time data for all flights departing NYC in 2013.</p>
 </div>
 <div id="type-of-study" class="section level3">
 <h3>Type of study</h3>
 <p><strong>What type of study is this (observational/experiment)?</strong></p>
+<p>Observational study</p>
 </div>
 <div id="data-source" class="section level3">
 <h3>Data Source</h3>
 <p><strong>If you collected the data, state self-collected. If not, provide a citation/link.</strong></p>
+<p><a href="https://github.com/hadley/nycflights13" class="uri">https://github.com/hadley/nycflights13</a></p>
 </div>
 <div id="dependent-variable" class="section level3">
 <h3>Dependent Variable</h3>
 <p><strong>What is the response variable? Is it quantitative or qualitative?</strong></p>
+<p>The response variable is airline delay or not</p>
+<pre class="r"><code>flights=flights%&gt;%
+  mutate(dep_delay_bool=ifelse(dep_delay&gt;=0,'ontime','delay'))
+
+class(flights$dep_delay_bool)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
 </div>
 <div id="independent-variable" class="section level3">
 <h3>Independent Variable</h3>
 <p><strong>You should have two independent variables, one quantitative and one qualitative.</strong></p>
+<pre class="r"><code>class(flights$origin)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
 </div>
 <div id="relevant-summary-statistics" class="section level3">
 <h3>Relevant summary statistics</h3>
 <p><strong>Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.</strong></p>
+<div id="delay-proportion" class="section level6">
+<h6>Delay proportion</h6>
+<pre class="r"><code>table(flights$dep_delay_bool)</code></pre>
+<pre><code>## 
+##  delay ontime 
+## 183575 144946</code></pre>
+<pre class="r"><code>prop.table(table(flights$dep_delay_bool))</code></pre>
+<pre><code>## 
+##     delay    ontime 
+## 0.5587923 0.4412077</code></pre>
+</div>
+<div id="number-of-flights-by-each-departure-airport" class="section level6">
+<h6>number of flights by each departure airport</h6>
+<pre class="r"><code>table(flights$origin)</code></pre>
+<pre><code>## 
+##    EWR    JFK    LGA 
+## 120835 111279 104662</code></pre>
+<pre class="r"><code>prop.table(table(flights$origin))</code></pre>
+<pre><code>## 
+##       EWR       JFK       LGA 
+## 0.3587993 0.3304244 0.3107763</code></pre>
+</div>
+<div id="contingency-table-airport-v.s.-delay" class="section level6">
+<h6>Contingency table : Airport v.s. Delay</h6>
+<pre class="r"><code>table(flights$origin, flights$dep_delay_bool)</code></pre>
+<pre><code>##      
+##       delay ontime
+##   EWR 59300  58296
+##   JFK 61146  48270
+##   LGA 63129  38380</code></pre>
+<pre class="r"><code>prop.table(table(flights$origin, flights$dep_delay_bool),1)</code></pre>
+<pre><code>##      
+##           delay    ontime
+##   EWR 0.5042689 0.4957311
+##   JFK 0.5588397 0.4411603
+##   LGA 0.6219054 0.3780946</code></pre>
+</div>
 </div>
 
 
