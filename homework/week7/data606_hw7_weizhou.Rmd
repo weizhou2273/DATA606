@@ -1,0 +1,113 @@
+---
+title: "Data606_hw7_weizhou"
+author: "Wei Zhou"
+date: "4/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 7.24 Nutrition at Starbucks, Part I.
+
+#####a. Describe the relationship between number of calories and amount of carbohydrates (in grams) that Starbucks food menu items contain.
+
+It seems there is a weak positive relationship between the number of calories and amount of carbohydrates . 
+
+#####b. In this scenario, what are the explanatory and response variables?
+Calories is explanatory and carbs is response. 
+
+#####c. why might we want to fit a regression line to these data?
+Customers would like to kow how many Calories on average are coming from carbs.
+
+#####d. Do these data meet the conditions required for fitting a least squares line?
+No. The residuals are not constant as residuals increase as the calories increase.
+
+
+## 7.26 Body measurements, Part III.
+
+#####a.Write the equation of the regression line for predicting height.
+```{r}
+avg_shoulder = 107.20 
+sd_shoulder = 10.37 
+avg_height = 171.14 
+sd_height = 9.41 
+cor = 0.67 
+
+b1 <- (sd_height/sd_shoulder) * cor
+b0 <- avg_height - b1 * avg_shoulder
+b1
+b0
+```
+Equation: y= `r b1`X + `r b0`
+
+##### b. Interpret the slope and the intercept in this context.
+Slope = `r b1` means every 1 cm increase in should girth, the height increase by `r b1` cm on average
+
+Intercept = `r b0` means if a person has 0 cm in shoulder girth, the person should be 105.9561 cm tall on average. 
+
+##### c. Calculate R2 of the regression line for predicting height from shoulder girth, and interpret it in the context of the application.
+R2=0.4489. 44.89% of the variation is accounter for should girth. 
+
+##### d. A randomly selected student from your class has a shoulder girth of 100 cm. Predict the height of this student using the model.
+
+```{r}
+pred = b1*100+b0
+pred
+```
+
+##### e. The student from part (d) is 160 cm tall. Calculate the residual, and explain what this residual means.
+```{r}
+residual = pred - 160 
+residual
+```
+Residual is `r residual`. It means there is a `r residual` cm difference between the prediction and the actual observation. 
+
+
+##7.30 Cats, Part I. 
+
+#####a. Write out the linear model.
+
+```{r}
+b0 = -0.357
+b1 = 4.034 
+```
+y = `r b1`X - `r -b0` 
+
+#####b.  Interpret the intercept.
+The intercept here means the off-set between the body mass and heart mass. 
+
+#####c. Interpret the slope
+The slope means the heart weight increase 4.034 g over 1 kg increase in body weight. 
+
+#####d. Interpret R2.
+64.66% of the heart weight variation is explained by the cat's body mass. 
+
+#####e. Calculate the correlation coefficient. 
+```{r}
+r2 = 0.6466 
+r = sqrt(r2)
+r
+```
+
+
+##7.40 Rate my professor.
+
+##### a. Given that the average standardized beauty score is -0.0883 and average teaching evaluation score is 3.9983, calculate the slope. Alternatively, the slope may be computed using just the information provided in the model summary table.
+
+```{r}
+b0 <- 4.010
+x <- -.0883
+y <- 3.9983
+b1 = (y-b0)/x
+b1
+```
+
+##### b.Do these data provide convincing evidence that the slope of the relationship between teaching evaluation and beauty is positive? Explain your reasoning.
+The p-value=0.0000 mean the model is statistically significant. The slope seems large enough
+
+
+
+
+
