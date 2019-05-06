@@ -1,0 +1,126 @@
+---
+title: "Data606_hw8_weizhou"
+author: "Wei Zhou"
+date: "5/5/2019"
+output:
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Exercise 8.2 Baby weights, Part II
+Exercise 8.1 introduces a data set on birth weight of babies. Another variable we consider is parity, which is 0 if the child is the first born, and 1 otherwise. The summary table below shows the results of a linear regression model for predicting the average birth weight of babies, measured in ounces, from parity.
+
+
+#### a.  Write the equation of the regression line.
+
+y_hat = 120.07 - 1.93 * parity
+
+#### b. Interpret the slope in this context, and calculate the predicted birth weight of first borns and others.
+
+If parity is 1 which means the child is not the first born, we would expect 1.93 oz. lower birth weight than first born child. 
+
+#### c. Is there a statistically significant relationship between the average birth weight and parity?
+
+Since the pvalue is >= 0.05, there is no statistically significant relationship between the average birth weight and parity. 
+
+
+##Exercise 8.4 Absenteeism
+
+####(a) Write the equation of the regression line.
+
+ŷ =18.93−9.11×eth+3.10×sex+2.15×lrn
+
+#### (b) Interpret each one of the slopes in this context.
+
+1. While other variables are constant, if ethnic = 1 (aboriginal) , we would expect the absenteeism to decrease 9.11 
+
+2. While other variables are constant, if sex = 1 (male) , we would expect the absenteeism to increase 3.10
+
+3. While other variables are constant, if learner status = 1 (slow learner) , we would expect the absenteeism to increase 2.15. 
+
+
+#### (c)Calculate the residual for the first observation in the data set: a student who is aboriginal, male, a slow learner, and missed 2 days of school.
+
+```{r}
+y = 18.93 - 9.11 * 0 + 3.10 * 1 + 2.15 * 1
+residual = 2 - y
+residual
+``` 
+
+The residual for the observation is `r residual`
+
+#### (d) The variance of the residuals is 240.57, and the variance of the number of absent days for all students in the data set is 264.17. Calculate the R2 and the adjusted R2. Note that there are 146 observations in the data set.
+
+```{r}
+r_sq = 1- 240.57 / 264.17 
+```
+
+R^2 = `r r_sq`
+
+```{r}
+adj_r_sq = 1- (240.57 / 264.17) * ((146-1)/(146-3-1))
+adj_r_sq
+```
+
+R^2_adjust = `r adj_r_sq`
+
+
+##Exercise 8.8 Absenteeism, Part II
+
+#### a. Which, if any, variable should be removed from the model first?
+Since removing the learner status has the highest adjusted R square, learnner status should be removed from the model first. 
+
+##Exercise 8.16 Challenger disaster, Part I
+
+#### a. Each column of the table above represents a different shuttle mission. Examine these data and describe what you observe with respect to the relationship between temperatures and damaged O-rings.
+
+The number of O-rings damaged seems to be strongly correlated with the temperature. The higher the temperature, the lower possibility the O - ring been damaged. 
+
+#### b. Failures have been coded as 1 for a damaged O-ring and 0 for an undamaged O-ring, and a logistic regression model was fit to these data. A summary of this model is given below. Describe the key components of this summary table in words.
+A negative slope indicates a negative association between temperature and damaged O-rings. 
+The associate between temperature and o-ring damage is staticially significant. 
+
+#### c. Write out the logistic model using the point estimates of the model parameters.
+log(p/(1-p)) = 11.663−0.2162×temperature 
+
+#### d. Based on the model, do you think concerns regarding O-rings are justified? Explain.
+```{r}
+P_50 =exp(11.663-0.2162*50)/(1+exp(11.663-0.2162*50))
+```
+
+According to the model, there will be a high chance of damaged rings under 50 degrees (`r P_50`). Since O-rings are critical components to success, the concerns are justified
+
+## Exercise 8.18 Challenger disaster, Part II
+
+#### a. The data provided in the previous exercise are shown in the plot. The logistic model fit to these data may be written as 
+```{r}
+p_dmg = function(temp){
+  p=exp(11.663-0.2162*temp)/(1+exp(11.663-0.2162*temp))
+  return(round(p,3))
+}
+
+temp_ls = seq(51,71,2)
+probs = p_dmg(temp_ls)
+result =data.frame(probs,temp_ls)
+result
+```
+
+
+#### b. Add the model-estimated probabilities from part (a) on the plot, then connect these dots using a smooth curve to represent the model-estimated probabilities.
+
+```{r}
+plot(result, type = "b", pch = 19, col = "red")
+```
+
+####c. Describe any concerns you may have regarding applying logistic regression in this application, and note any assumptions that are required to accept the model’s validity.
+
+The conditions for this logistic regression are hard to check. 
+
+
+
