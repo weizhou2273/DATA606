@@ -1,0 +1,172 @@
+---
+title: DATA 606 Final Project
+author: Wei Zhou
+output: 
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_float: true
+---
+
+### Data Preparation
+
+```{r setup, echo=TRUE, results='hide', warning=FALSE, message=FALSE}
+# load data
+library(dplyr)
+library(nycflights13)
+library(ggplot2)
+
+head(flights,10)
+names(flights)
+```
+
+
+### Research question 
+
+**You should phrase your research question in a way that matches up with the scope of inference your dataset allows for.**
+
+Is there any relationship between origin airport and and probability of delay? 
+
+** Why do you care? Why should others care?**
+Working as a consultant, one will spend a good amount of time in Airport. If the research indicates there is a relationship between departure airport and probability of delay, one can consider the airport factor to avoid potential delay. 
+
+##Data
+
+### Cases 
+
+**What are the cases, and how many are there?**
+
+```{r}
+nrow(flights)
+summary(flights$year)
+```
+
+Cases are each flights information departure from EWR,JFK,LGA in 2013. 
+
+The are 336776 cases.
+
+
+### Data collection 
+
+**Describe the method of data collection.**
+
+Data is clollected by the 'dplyr' library. It contains all airline on-time data for all flights departing NYC in 2013. 
+
+**If you collected the data, state self-collected. If not, provide a citation/link.**
+
+https://github.com/hadley/nycflights13
+
+
+### Type of study 
+
+**What type of study is this (observational/experiment)?**
+
+Observational study
+
+###Variables
+
+**Dependent Variable: What is the response variable? Is it quantitative or qualitative?**
+
+The response variable is airline delay or not
+```{r}
+flights=flights%>%
+  mutate(dep_delay_bool=ifelse(dep_delay>=0,'ontime','delay'))
+class(flights$dep_delay_bool)
+```
+
+**Independent Variable: You should have two independent variables, one quantitative and one qualitative.**
+```{r}
+class(flights$origin)
+```
+
+
+### Scope of inference
+**generalizability: Identify the population of interest, and whether the findings from this analysis can be generalized to that population, or, if not, a subsection of that population. Explain why or why not. Also discuss any potential sources of bias that might prevent generalizability.**
+
+
+Population of interest: Flights departure from NYC airport. 
+The finding from this analys can be generalized to the population.
+
+**causality: Can these data be used to establish causal links between the variables of interest? Explain why or why not.**
+These data cannot be used to establish causal links between the origin airport and departure delay. Chi-square test can only indicate correlationship between two categorical relationship. 
+
+
+### Exploratory data analysis:
+
+#### Relevant summary statistics 
+**Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.**
+
+#### Delay proportion
+55% of the NYC flights are delayed,only 44% were on time.
+```{r}
+table(flights$dep_delay_bool)
+prop.table(table(flights$dep_delay_bool))
+
+```
+**Barchart showing the proportion of departure delay and on time.**
+```{r}
+ggplot(flights,aes(1 ,fill =dep_delay_bool )) + 
+    geom_bar(position = "fill")+
+    coord_flip()
+```
+
+#### number of flights by each departure airport
+**EWR had the most flights comparing to JFK and LGA**
+```{r}
+table(flights$origin)
+prop.table(table(flights$origin))
+```
+
+#### Contingency table : Airport v.s. Delay
+**According to the historical data, EWR had the least delay rate (50.4%), by comparing with JFK (55.9%) and LGA (62.1%)**
+```{r}
+table(flights$origin, flights$dep_delay_bool)
+prop.table(table(flights$origin, flights$dep_delay_bool),1)
+```
+```{r}
+ggplot(flights,aes(origin ,fill =dep_delay_bool )) + 
+    geom_bar(position = "fill")+
+    ggtitle("Airport Delay Proportion")
+```
+###Delay rate by time
+**It is also interesting to see the delay rate changed by time**
+#### By Year
+```{r}
+flights%>%
+  na.omit()%>%
+  mutate(delay_rate = ifelse(dep_delay_bool=='delay',1,0))%>%
+  group_by(month)%>%
+  summarize(delay = round(mean(delay_rate),2))%>%
+  ggplot(aes(month,delay))+
+  geom_line(color='blue')+
+  geom_text(aes(label=delay),hjust=0, vjust=0)
+  
+```
+
+###Inference
+
+#### Check Conditions
+1. The sampling method is simple random sampling.
+
+2. The variables under study are each categorical.
+
+3. When sample data are displayed in a contingency table, the  frequency count for each cell of the table are all more than 5.
+
+#### Chi-square test
+
+To test the relationship between Origin Airport and Delay using Pearson's Chi-square test, we need to set null and alternative hypothesis: 
+
+Null Hypothesis: The Origin Airport and Departure Delay Senario are independent with each other
+Alternative Hypothesis: The Origin Airport and Departure Delay Senario are not independent with each other
+```{r}
+chi_sq_tbl=table(flights$origin, flights$dep_delay_bool)
+chisq.test(chi_sq_tbl)
+```
+From the above result, we can see that p-value is less than the significance level (0.05). Therefore, we can reject the null hypothesis and conclude that the two variables (Origin Airport & Departure Delay) are not independent.
+
+###Conclusion
+Given the result of Chi-square test, we can conclude that the origin airport and delayed departure are not independent with each other. Thus, if you are on a time sensitive business trip, it is important to take Origin Airport as a factor to avoid potential departure delay. In the future research, it is also interesting to explore how time (Year,Month,hour) and weather affect departure delay. 
+
+
+
+
